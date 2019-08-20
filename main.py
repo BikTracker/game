@@ -71,60 +71,48 @@ def play_again():
 
 async def bitcoin_change(message: types.Message, callback_data: dict, a, b):
     number = random.randint(0, 10)
-    if 0 <= number <= 10:
+    await bot.send_message(
+        message.chat.id, "Bitcoin will fall or grow?", reply_markup=bitcoin()
+    )
 
-        def bitcoin():
-            return types.InlineKeyboardMarkup().row(
-                types.InlineKeyboardButton(
-                    "grow", callback_data=change_sum.new(action="grow", value="-")
-                ),
-                types.InlineKeyboardButton(
-                    "fall", callback_data=change_sum.new(action="fall", value="-")
-                ),
-            )
+    if callback_data["action"] == "grow" and number > 5:
 
         await bot.send_message(
-            message.chat.id, "Bitcoin will fall or grow?", reply_markup=bitcoin()
+            message.chat.id, f"You win {b} money!", reply_markup=play_again()
         )
 
-        if callback_data["action"] == "grow" and number > 5:
+        a += b
 
-            await bot.send_message(
-                message.chat.id, f"You win {b} money!", reply_markup=play_again()
-            )
+    elif callback_data["action"] == "fall" and number < 5:
 
-            a += b
+        await bot.send_message(
+            message.chat.id, f"You win {b} money!", reply_markup=play_again()
+        )
 
-        elif callback_data["action"] == "fall" and number < 5:
+        a += b
 
-            await bot.send_message(
-                message.chat.id, f"You win {b} money!", reply_markup=play_again()
-            )
+    elif callback_data["action"] == "fall" and number > 5:
 
-            a += b
+        await bot.send_message(
+            message.chat.id, f"You lose {b} money!", reply_markup=play_again()
+        )
 
-        elif callback_data["action"] == "fall" and number > 5:
+        a -= b
 
-            await bot.send_message(
-                message.chat.id, f"You lose {b} money!", reply_markup=play_again()
-            )
+    elif callback_data["action"] == "grow" and number < 5:
 
-            a -= b
+        await bot.send_message(
+            message.chat.id, f"You lose {b} money!", reply_markup=play_again()
+        )
 
-        elif callback_data["action"] == "grow" and number < 5:
+        a -= b
 
-            await bot.send_message(
-                message.chat.id, f"You lose {b} money!", reply_markup=play_again()
-            )
-
-            a -= b
-
-        if callback_data["action"] == "play_again":
-            await bot.send_message(
-                message.chat.id,
-                f"Сейчас у вас есть {a} монет!",
-                reply_markup=main_game_keyboard(),
-            )
+    if callback_data["action"] == "play_again":
+        await bot.send_message(
+            message.chat.id,
+            f"Сейчас у вас есть {a} монет!",
+            reply_markup=main_game_keyboard(),
+        )
 
 
 @dp.message_handler(commands="start")
