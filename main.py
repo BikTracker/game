@@ -11,7 +11,7 @@ a = 70
 
 
 def main_game_keyboard():
-    return types.InlineKeyboardMarkup(row_width=2).add(
+    return types.InlineKeyboardMarkup(row_width=2).row(
         types.InlineKeyboardButton(
             "1", callback_data=change_sum.new(action="make", value="1")
         ),
@@ -23,7 +23,7 @@ def main_game_keyboard():
         ),
         types.InlineKeyboardButton(
             "1000", callback_data=change_sum.new(action="make", value="1000")
-        ),
+        ),).row(
         types.InlineKeyboardButton(
             "+ 1", callback_data=change_sum.new(action="plus", value="1")
         ),
@@ -31,8 +31,8 @@ def main_game_keyboard():
             f"{b}", callback_data=change_sum.new(action="show_current_sum", value="-")
         ),
         types.InlineKeyboardButton(
-            "- 1", callback_data=change_sum.new(action="minus", value="1")
-        ),
+            "- 1", callback_data=change_sum.new(action="minus", value="1"),
+        ),).row(
         types.InlineKeyboardButton(
             "play", callback_data=change_sum.new(action="play", value="-")
         ),
